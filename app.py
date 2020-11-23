@@ -16,6 +16,11 @@ config = {
     "measurementId": "G-13PZY5QQPK"
 }
 
+firebase = Firebase(config)
+storage = firebase.storage()
+storage.child("sort_image/").put("img.png")
+
+
 @app.route('/getmsg/', methods=['GET'])
 def respond():
     # Retrieve the name from url parameter
