@@ -1,12 +1,11 @@
 # app.py
-import os
 from firebase import Firebase
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
 config = {
-    "apiKey": os.environ["REACT_APP_FIREBASE_API_KEY"],
+    "apiKey": "",
     "authDomain": "spot-the-lesion.firebaseapp.com",
     "databaseURL": "https://spot-the-lesion.firebaseio.com",
     "projectId": "spot-the-lesion",
@@ -15,8 +14,6 @@ config = {
     "appId": "1:131387805123:web:9bdbabe358ffcf04ad4176",
     "measurementId": "G-13PZY5QQPK"
 }
-
-# firebase = Firebase(config)
 
 
 @app.route('/getmsg/', methods=['GET'])
