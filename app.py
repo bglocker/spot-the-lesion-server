@@ -18,7 +18,7 @@ config = {
 
 firebase = Firebase(config)
 storage = firebase.storage()
-storage.child("sort_image/").put("img.png")
+storage.child("sort_image/img.png").put("img.png")
 
 
 @app.route('/getmsg/', methods=['GET'])
