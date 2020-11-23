@@ -1,1 +1,1 @@
-web: sh target/bin/webapp
+web: gunicorn app:app
