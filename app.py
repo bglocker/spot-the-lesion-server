@@ -1,13 +1,14 @@
 # app.py
+import os
 from firebase import Firebase
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
 config = {
-    "apiKey": "",
+    "apiKey": os.environ["REACT_APP_FIREBASE_API_KEY"],
     "authDomain": "spot-the-lesion.firebaseapp.com",
-    "databaseURL": "https://spot-the-lesion.firebaseio.com",
+    "databaseURL": "https://spot-the-lesion.firebaseio.com/",
     "projectId": "spot-the-lesion",
     "storageBucket": "spot-the-lesion.appspot.com",
     "messagingSenderId": "131387805123",
@@ -15,6 +16,7 @@ config = {
     "measurementId": "G-13PZY5QQPK"
 }
 
+firebase = Firebase(config)
 
 @app.route('/getmsg/', methods=['GET'])
 def respond():
@@ -44,8 +46,7 @@ def respond():
 def post_something():
     param = request.form.get('name')
     print(param)
-    # You can add the test cases you made in the previous function, but in our case here you are just testing the
-    # POST functionality
+    # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
     if param:
         return jsonify({
             "Message": f"Welcome {name} to our awesome platform!!",
