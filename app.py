@@ -1,6 +1,23 @@
 # app.py
+import os
+from firebase import Firebase
 from flask import Flask, request, jsonify
+
 app = Flask(__name__)
+
+config = {
+    "apiKey": os.environ["REACT_APP_FIREBASE_API_KEY"],
+    "authDomain": "spot-the-lesion.firebaseapp.com",
+    "databaseURL": "https://spot-the-lesion.firebaseio.com",
+    "projectId": "spot-the-lesion",
+    "storageBucket": "spot-the-lesion.appspot.com",
+    "messagingSenderId": "131387805123",
+    "appId": "1:131387805123:web:9bdbabe358ffcf04ad4176",
+    "measurementId": "G-13PZY5QQPK"
+}
+
+firebase = Firebase(config)
+
 
 @app.route('/getmsg/', methods=['GET'])
 def respond():
@@ -25,26 +42,30 @@ def respond():
     # Return the response in json format
     return jsonify(response)
 
+
 @app.route('/post/', methods=['POST'])
 def post_something():
     param = request.form.get('name')
     print(param)
-    # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
+    # You can add the test cases you made in the previous function, but in our case here you are just testing the
+    # POST functionality
     if param:
         return jsonify({
             "Message": f"Welcome {name} to our awesome platform!!",
             # Add this option to distinct the POST request
-            "METHOD" : "POST"
+            "METHOD": "POST"
         })
     else:
         return jsonify({
             "ERROR": "no name found, please send a name."
         })
 
+
 # A welcome message to test our server
 @app.route('/')
 def index():
     return "<h1>Welcome to our server !!</h1>"
+
 
 if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support
