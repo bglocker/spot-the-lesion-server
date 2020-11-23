@@ -16,7 +16,7 @@ config = {
     "measurementId": "G-13PZY5QQPK"
 }
 
-firebase = Firebase(config)
+# firebase = Firebase(config)
 
 
 @app.route('/getmsg/', methods=['GET'])
