@@ -49,7 +49,7 @@ public class Main {
             webPort = "8080";
         }
 
-        tomcat.setPort(Integer.valueOf(webPort));
+        tomcat.setPort(Integer.parseInt(webPort));
         File webContentFolder = new File(root.getAbsolutePath(), "src/main/webapp/");
         if (!webContentFolder.exists()) {
             webContentFolder = Files.createTempDirectory("default-doc-base").toFile();
