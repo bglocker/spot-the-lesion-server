@@ -7,6 +7,7 @@ click==7.1.2
 cryptography==3.2.1
 firebase==3.0.1
 Flask==1.1.2
+Flask-Cors==3.0.9
 gcloud==0.18.3
 google-api-core==1.23.0
 google-auth==1.23.0
