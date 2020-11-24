@@ -27,9 +27,10 @@ storage = firebase.storage()
 @app.route('/post/', methods=['POST'])
 @cross_origin()
 def post_something():
-    data = request.form.to_dict()
-    print(data)
-    print(data.get('title'))
+    scan = request.files["scan"]
+    json = request.files["json"]
+    print(scan)
+    print(json)
 
     return "Update has been successful!"
 
