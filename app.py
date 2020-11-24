@@ -27,6 +27,8 @@ storage = firebase.storage()
 @app.route('/post/', methods=['POST'])
 @cross_origin()
 def post_something():
+    print("here")
+    print(request)
     scan = request.files["scan"]
     json = request.files["json"]
     print(scan)
