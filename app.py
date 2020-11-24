@@ -28,7 +28,7 @@ storage.child("sort_image/img.png").put("img.png")
 @app.route('/post/', methods=['POST'])
 @cross_origin()
 def post_something():
-    print(request.form)
+    print(request.form.get("title"))
 
     return "Update has been successful!"
 
