@@ -50,6 +50,7 @@ def respond():
 
 
 @app.route('/post/', methods=['POST'])
+@cross_origin(origin='localhost', headers=[])
 def post_something():
     param = request.form.get('name')
     # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
