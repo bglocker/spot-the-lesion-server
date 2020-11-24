@@ -32,6 +32,7 @@ def post_something():
     item = {'label': data.get('title')}
     print(item)
     print(data.get('title'))
+    print(data.get('files'))
 
     return "Update has been successful!"
 
