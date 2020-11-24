@@ -37,7 +37,7 @@ def post_something():
 
 
 # A welcome message to test our server
-@app.route('/')
+@app.route('/', methods=['GET'])
 @cross_origin()
 def index():
     return "Spot-the-lesion working server for image upload."
