@@ -5,7 +5,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 config = {
     "apiKey": os.environ["REACT_APP_FIREBASE_API_KEY"],
@@ -24,6 +25,7 @@ storage.child("sort_image/img.png").put("img.png")
 
 
 @app.route('/getmsg/', methods=['GET'])
+@cross_origin()
 def respond():
     # Retrieve the name from url parameter
     name = request.args.get("name", None)
@@ -48,6 +50,7 @@ def respond():
 
 
 @app.route('/post/', methods=['POST'])
+@cross_origin()
 def post_something():
     param = request.form.get('name')
     print(param)
@@ -66,6 +69,7 @@ def post_something():
 
 # A welcome message to test our server
 @app.route('/')
+@cross_origin()
 def index():
     return "<h1>Welcome to our server !!</h1>"
 
