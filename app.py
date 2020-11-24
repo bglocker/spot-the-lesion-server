@@ -5,7 +5,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-cors = CORS(app)
+CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 config = {
@@ -51,7 +52,6 @@ def respond():
 @app.route('/post/', methods=['POST'])
 def post_something():
     param = request.form.get('name')
-    print(param)
     # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
     if param:
         return jsonify({
@@ -73,10 +73,10 @@ def index():
 
 @app.after_request
 def after_request(response):
-    header = response.headers
-    header['Access-Control-Allow-Origin'] = '*'
-    header['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-    header['Access-Control-Allow-Methods'] = 'OPTIONS, HEAD, GET, POST, DELETE, PUT'
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
 
