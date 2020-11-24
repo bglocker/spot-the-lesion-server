@@ -22,7 +22,6 @@ config = {
 
 firebase = Firebase(config)
 storage = firebase.storage()
-storage.child("sort_image/img.png").put("img.png")
 
 
 @app.route('/post/', methods=['POST'])
