@@ -25,7 +25,6 @@ storage.child("sort_image/img.png").put("img.png")
 
 
 @app.route('/getmsg/', methods=['GET'])
-@cross_origin()
 def respond():
     # Retrieve the name from url parameter
     name = request.args.get("name", None)
@@ -50,7 +49,6 @@ def respond():
 
 
 @app.route('/post/', methods=['POST'])
-@cross_origin()
 def post_something():
     param = request.form.get('name')
     print(param)
@@ -69,9 +67,17 @@ def post_something():
 
 # A welcome message to test our server
 @app.route('/')
-@cross_origin()
 def index():
     return "<h1>Welcome to our server !!</h1>"
+
+
+@app.after_request
+def after_request(response):
+    header = response.headers
+    header['Access-Control-Allow-Origin'] = '*'
+    header['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    header['Access-Control-Allow-Methods'] = 'OPTIONS, HEAD, GET, POST, DELETE, PUT'
+    return response
 
 
 if __name__ == '__main__':
