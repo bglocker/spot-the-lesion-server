@@ -30,6 +30,8 @@ def post_something():
     scan = request.files["scan"]
     print(scan)
 
+    firebase.storage().child("sort_image/scan.png", scan)
+
     return "Update has been successful!"
 
 
