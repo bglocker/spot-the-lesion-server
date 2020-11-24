@@ -28,7 +28,7 @@ storage.child("sort_image/img.png").put("img.png")
 @app.route('/post/', methods=['POST'])
 @cross_origin()
 def post_something():
-    return True
+    return "taxation is theft"
 
 
 # A welcome message to test our server
