@@ -28,14 +28,16 @@ storage.child("sort_image/img.png").put("img.png")
 @app.route('/post/', methods=['POST'])
 @cross_origin()
 def post_something():
-    return "taxation is theft"
+    print(request.form)
+
+    return "Update has been successful!"
 
 
 # A welcome message to test our server
 @app.route('/')
 @cross_origin()
 def index():
-    return "<h1>Welcome to our server !!</h1>"
+    return "Spot-the-lesion working server for image upload."
 
 
 if __name__ == '__main__':
