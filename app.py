@@ -30,7 +30,7 @@ def post_something():
     scan = request.files["scan"]
     json = request.files["json"]
 
-    numbers = firebase.database().collection("game_options").doc("file_numbers").get()
+    numbers = firebase.database().child("game_options").get("file_numbers")
 
     print(numbers)
 
