@@ -28,11 +28,13 @@ storage = firebase.storage()
 @cross_origin()
 def post_something():
     scan = request.files["scan"]
-    print(scan)
+    json = request.files["json"]
 
-    firebase.storage().child("sort_image/scan.png").put(scan)
+    numbers = firebase.database().collection("game_options").doc("file_numbers").get()
 
-    return "Update has been successful!"
+    print(numbers)
+
+    return "Update has been successful, managed to push one image!"
 
 
 # A welcome message to test our server
