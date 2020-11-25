@@ -34,7 +34,7 @@ def post_something():
     scan = request.files["scan"]
     json = request.files["json"]
 
-    numbers = firebase.database().child("game_options").child("file_numbers").get(user)
+    numbers = firebase.database().child("game_options").child("file_numbers").get(user['idToken'])
 
     print(numbers)
 
