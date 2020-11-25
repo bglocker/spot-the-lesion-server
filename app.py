@@ -30,8 +30,7 @@ def post_something():
     scan = request.files["scan"]
     json = request.files["json"]
 
-    numbers = firebase.database().child("game_options").child("file_numbers").get(
-        os.environ["REACT_APP_FIREBASE_ADMIN_KEY"])
+    numbers = firebase.database().child("game_options").child("file_numbers").get()
 
     print(numbers)
 
