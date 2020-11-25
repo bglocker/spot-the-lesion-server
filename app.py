@@ -23,6 +23,10 @@ config = {
 firebase = Firebase(config)
 storage = firebase.storage()
 
+# Login to be able to operate
+user = firebase.auth().sign_in_with_email_and_password(os.environ["REACT_APP_FIREBASE_ADMIN_EMAIL"],
+                                                       os.environ["REACT_APP_FIREBASE_ADMIN_KEY"])
+
 
 @app.route('/post/', methods=['POST'])
 @cross_origin()
@@ -30,7 +34,7 @@ def post_something():
     scan = request.files["scan"]
     json = request.files["json"]
 
-    numbers = firebase.database().child("game_options").child("file_numbers").get()
+    numbers = firebase.database().child("game_options").child("file_numbers").get(user)
 
     print(numbers)
 
