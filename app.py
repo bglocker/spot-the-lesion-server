@@ -37,12 +37,7 @@ images_path = "images/"
 difficulties = [easy_path, medium_path, hard_path]
 
 
-@app.route('/post/', methods=['POST'])
-@cross_origin()
-def post_something():
-    image_scan = request.files["scan"]
-    image_json = request.files["json"]
-
+def retrieve_image_json_data():
     storage.child(cloud_path + "image_numbers.json").download("image_numbers.json")
 
     with open("image_numbers.json", 'r') as reader:
@@ -54,15 +49,51 @@ def post_something():
         medium_area = data["medium_area"]
         hard_area = data["hard_area"]
 
+    indexes = [easy_index, medium_index, hard_index]
+    area = [easy_area, medium_area, hard_area]
+    return indexes, area
+
+
+def upload_image_json_data(indexes, area):
+    open('image_numbers.json', 'w').close()
+    with open("image_numbers.json", 'w') as writer:
+        writer.write(json.dumps(
+            {'easy': indexes[0], 'medium': indexes[1], 'hard': indexes[2], "easy_area": area[0], "medium_area": area[1],
+             "hard_area": area[2]}, sort_keys=True, indent=4))
+
+    storage.child(cloud_path + "image_numbers.json").put("image_numbers.json")
+
+
+@app.route('/post/', methods=['POST'])
+@cross_origin()
+def post_something():
+    image_scan = request.files["scan"]
+    image_json = request.files["json"]
+
+    indexes, area = retrieve_image_json_data()
+
     # Save the files locally for processing
     image_scan.save("image.png")
     image_json.save("image.json")
 
     with open("image.json", 'r') as reader:
         data = json.load(reader)
-        lesion_area = data[square_data]
+        height = data[square_data][2] - data[square_data][0]
+        width = data[square_data][3] - data[square_data][1]
+        lesion_area = height * width
 
-    print(lesion_area)
+    # Find difficulty bucket
+    for i in range(len(difficulties)):
+        if area[i] <= lesion_area:
+            difficulty_bucket = difficulties[i]
+            storage.child(cloud_path + annotations_path + difficulty_bucket + str(indexes[i]) + ".json").put(
+                "image.json")
+            storage.child(cloud_path + images_path + difficulty_bucket + str(indexes[i]) + ".png").put(
+                "image.png")
+            indexes[i] += 1
+            break
+
+    upload_image_json_data(indexes, area)
 
     return "Update has been successful, managed to push one image!"
 
@@ -72,6 +103,56 @@ def post_something():
 @cross_origin()
 def index():
     return "Spot-the-lesion working server for image upload."
+
+
+def add_images():
+    def get_area(file_name):
+        with open(new_content_path + annotations + file_name, 'r') as reader:
+            data = json.load(reader)
+            height = data[square_data][2] - data[square_data][0]
+            width = data[square_data][3] - data[square_data][1]
+
+        return height * width
+
+    f = []
+    for (dirpath, dirnames, filenames) in walk(new_content_path + annotations):
+        f.extend(filenames)
+        break
+
+    g = []
+    for (dirpath, dirnames, filenames) in walk(new_content_path + images):
+        g.extend(filenames)
+        break
+
+    files = list(zip(f, g))
+
+    indexes, area = retrieve_image_json_data()
+
+    def upload_data(files):
+        (new_annot_file, new_image_file) = files
+
+        lesion_area = get_area(new_annot_file)
+        print("area = " + str(lesion_area))
+
+        print("Storing " + new_annot_file)
+        for i in range(len(difficulties)):
+            if area[i] <= lesion_area:
+                difficulty_bucket = difficulties[i]
+                print(
+                    "Put on adddress " + cloud_path + difficulty_bucket + annotations_path + str(indexes[i]) + ".json")
+                print("Put file " + new_content_path + annotations + new_annot_file)
+                storage.child(cloud_path + annotations_path + difficulty_bucket + str(indexes[i]) + ".json").put(
+                    new_content_path + annotations + new_annot_file)
+                storage.child(cloud_path + images_path + difficulty_bucket + str(indexes[i]) + ".png").put(
+                    new_content_path + images + new_image_file)
+                indexes[i] += 1
+                print("Finished " + new_annot_file)
+                return
+
+    for x in files:
+        upload_data(x)
+
+    upload_image_json_data(indexes, area)
 
 
 if __name__ == '__main__':
