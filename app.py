@@ -1,4 +1,5 @@
 # app.py
+import json
 import os
 from firebase import Firebase
 from flask import Flask, request, jsonify
@@ -22,17 +23,35 @@ config = {
 
 firebase = Firebase(config)
 storage = firebase.storage()
-
+cloud_path = ""
+easy_path = "easy/"
+medium_path = "medium/"
+hard_path = "hard/"
+annotations_path = "annotation/"
+images_path = "images/"
+difficulties = [easy_path, medium_path, hard_path]
 
 @app.route('/post/', methods=['POST'])
 @cross_origin()
 def post_something():
-    scan = request.files["scan"]
-    json = request.files["json"]
+    image_scan = request.files["scan"]
+    image_json = request.files["json"]
 
-    numbers = firebase.database().child("game_options").child("file_numbers").get()
+    storage.child(cloud_path + "image_numbers.json").download("image_numbers.json")
 
-    print(numbers)
+    with open("image_numbers.json", 'r') as reader:
+        data = json.load(reader)
+        easy_index = data["easy"]
+        medium_index = data["medium"]
+        hard_index = data["hard"]
+        easy_area = data["easy_area"]
+        medium_area = data["medium_area"]
+        hard_area = data["hard_area"]
+
+    print("Retrieved some data")
+    print(easy_index)
+    print(easy_area)
+    print(medium_index)
 
     return "Update has been successful, managed to push one image!"
 
