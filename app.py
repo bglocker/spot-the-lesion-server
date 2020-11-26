@@ -54,9 +54,15 @@ def post_something():
         medium_area = data["medium_area"]
         hard_area = data["hard_area"]
 
-    # Read annotation data from pushed file
-    json_file = image_json.read()
-    print(json_file[square_data])
+    # Save the files locally for processing
+    image_scan.save("image.png")
+    image_json.save("image.json")
+
+    with open("image.json", 'r') as reader:
+        data = json.load(reader)
+        lesion_area = data[square_data]
+
+    print(lesion_area)
 
     return "Update has been successful, managed to push one image!"
 
