@@ -56,8 +56,7 @@ def post_something():
 
     # Read annotation data from pushed file
     json_file = image_json.read()
-    json_data = json.load(json_file)
-    print(json_data)
+    print(json_file[square_data])
 
     return "Update has been successful, managed to push one image!"
 
