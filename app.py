@@ -48,10 +48,8 @@ def post_something():
         medium_area = data["medium_area"]
         hard_area = data["hard_area"]
 
-    print("Retrieved some data")
-    print(easy_index)
-    print(easy_area)
-    print(medium_index)
+    json_data = json.load(image_json)
+    print(json_data)
 
     return "Update has been successful, managed to push one image!"
 
