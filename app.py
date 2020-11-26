@@ -1,8 +1,9 @@
 # app.py
 import json
 import os
+from os import walk
 from firebase import Firebase
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
@@ -23,6 +24,10 @@ config = {
 
 firebase = Firebase(config)
 storage = firebase.storage()
+square_data = "truth"
+new_content_path = "content/"
+annotations = "annotation/"
+images = "images/"
 cloud_path = ""
 easy_path = "easy/"
 medium_path = "medium/"
@@ -30,6 +35,7 @@ hard_path = "hard/"
 annotations_path = "annotation/"
 images_path = "images/"
 difficulties = [easy_path, medium_path, hard_path]
+
 
 @app.route('/post/', methods=['POST'])
 @cross_origin()
@@ -48,7 +54,7 @@ def post_something():
         medium_area = data["medium_area"]
         hard_area = data["hard_area"]
 
-    json_data = json.load(image_json)
+    json_data = image_json.read()
     print(json_data)
 
     return "Update has been successful, managed to push one image!"
