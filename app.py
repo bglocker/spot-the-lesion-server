@@ -74,7 +74,7 @@ def post_image_json_data():
     # Refresh expiry token to prevent stale date
     user = auth.refresh(user['refreshToken'])
 
-    print("Console log: a new post has been attempted")
+    print("Console log: a new post has been attempted with token " + user['idToken'])
 
     image_scan = request.files["scan"]
     image_json = request.files["json"]
