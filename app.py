@@ -69,12 +69,13 @@ def upload_image_json_data(indexes, area, user):
 @cross_origin()
 def post_image_json_data():
     # Create an auth instance and refresh token to securely interact with the firebase storage
-    user = auth.sign_in_with_email_and_password("spot-the-lesion@gmail.com", os.environ["REACT_APP_FIREBASE_AUTH_KEY"])
+    user = auth.sign_in_with_email_and_password("spot-the-lesion@gmail.com", os.environ["REACT_APP_SERVER_KEY"])
 
     # Refresh expiry token to prevent stale date
     user = auth.refresh(user['refreshToken'])
 
     print("Console log: a new post has been attempted with token " + user['idToken'])
+    print(request.form["key"])
 
     image_scan = request.files["scan"]
     image_json = request.files["json"]
@@ -84,6 +85,7 @@ def post_image_json_data():
     # Save the files locally for processing
     image_scan.save("image.png")
     image_json.save("image.json")
+
 
     with open("image.json", 'r') as reader:
         data = json.load(reader)
@@ -136,7 +138,7 @@ def add_images():
     files = list(zip(f, g))
 
     # Create an auth instance and refresh token to securely interact with the firebase storage
-    user = auth.sign_in_with_email_and_password("spot-the-lesion@gmail.com", os.environ["REACT_APP_FIREBASE_AUTH_KEY"])
+    user = auth.sign_in_with_email_and_password("spot-the-lesion@gmail.com", os.environ["REACT_APP_SERVER_KEY"])
 
     # Refresh expiry token to prevent stale date
     user = auth.refresh(user['refreshToken'])
