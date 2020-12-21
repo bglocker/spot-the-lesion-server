@@ -75,12 +75,6 @@ def post_image_json_data():
     user = auth.refresh(user['refreshToken'])
 
     print("Console log: a new post has been attempted with token " + user['idToken'])
-    key = request.form["key"]
-
-    if key:
-        print(key)
-    else:
-        print("null")
 
     image_scan = request.files["scan"]
     image_json = request.files["json"]
