@@ -24,6 +24,7 @@ config = {
 
 firebase = Firebase(config)
 storage = firebase.storage()
+auth = firebase.auth()
 square_data = "truth"
 new_content_path = "content/"
 annotations = "annotation/"
@@ -61,12 +62,21 @@ def upload_image_json_data(indexes, area):
             {'easy': indexes[0], 'medium': indexes[1], 'hard': indexes[2], "easy_area": area[0], "medium_area": area[1],
              "hard_area": area[2]}, sort_keys=True, indent=4))
 
+    # Create an auth instance and refresh token to securely interact with the firebase storage
+    user = auth.sign_in_with_email_and_password("spot-the-lesion@gmail.com", os.environ["REACT_APP_FIREBASE_AUTH_KEY"])
+
+    # Refresh expiry token to prevent stale date
+    user = auth.refresh(user['refreshToken'])
+
+    print("An upload has been made, logging..")
+    print(user)
+
     storage.child(cloud_path + "image_numbers.json").put("image_numbers.json")
 
 
 @app.route('/post/', methods=['POST'])
 @cross_origin()
-def post_something():
+def post_image_json_data():
     image_scan = request.files["scan"]
     image_json = request.files["json"]
 
