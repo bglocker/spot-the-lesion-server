@@ -75,7 +75,7 @@ def post_image_json_data():
     user = auth.refresh(user['refreshToken'])
 
     print("Console log: a new post has been attempted with token " + user['idToken'])
-    print(request.form["pass"])
+    print(request.values["pass"])
 
     image_scan = request.files["scan"]
     image_json = request.files["json"]
@@ -105,7 +105,7 @@ def post_image_json_data():
 
     upload_image_json_data(indexes, area, user)
 
-    return "Update has been successful, managed to push one image!"
+    return "Update has been successful, managed to push one image and jsom!"
 
 
 # A welcome message to test our server
