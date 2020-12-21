@@ -38,8 +38,8 @@ images_path = "images/"
 difficulties = [easy_path, medium_path, hard_path]
 
 
-def retrieve_image_json_data():
-    storage.child(cloud_path + "image_numbers.json").download("image_numbers.json")
+def retrieve_image_json_data(user):
+    storage.child(cloud_path + "image_numbers.json").download("image_numbers.json", user['idToken'])
 
     with open("image_numbers.json", 'r') as reader:
         data = json.load(reader)
@@ -55,32 +55,31 @@ def retrieve_image_json_data():
     return indexes, area
 
 
-def upload_image_json_data(indexes, area):
+def upload_image_json_data(indexes, area, user):
     open('image_numbers.json', 'w').close()
     with open("image_numbers.json", 'w') as writer:
         writer.write(json.dumps(
             {'easy': indexes[0], 'medium': indexes[1], 'hard': indexes[2], "easy_area": area[0], "medium_area": area[1],
              "hard_area": area[2]}, sort_keys=True, indent=4))
 
+    storage.child(cloud_path + "image_numbers.json").put("image_numbers.json", user['idToken'])
+
+
+@app.route('/post/', methods=['POST'])
+@cross_origin()
+def post_image_json_data():
     # Create an auth instance and refresh token to securely interact with the firebase storage
     user = auth.sign_in_with_email_and_password("spot-the-lesion@gmail.com", os.environ["REACT_APP_FIREBASE_AUTH_KEY"])
 
     # Refresh expiry token to prevent stale date
     user = auth.refresh(user['refreshToken'])
 
-    print("An upload has been made, logging..")
-    print(user)
+    print("Console log: a new post has been attempted")
 
-    storage.child(cloud_path + "image_numbers.json").put("image_numbers.json")
-
-
-@app.route('/post/', methods=['POST'])
-@cross_origin()
-def post_image_json_data():
     image_scan = request.files["scan"]
     image_json = request.files["json"]
 
-    indexes, area = retrieve_image_json_data()
+    indexes, area = retrieve_image_json_data(user)
 
     # Save the files locally for processing
     image_scan.save("image.png")
@@ -103,7 +102,7 @@ def post_image_json_data():
             indexes[i] += 1
             break
 
-    upload_image_json_data(indexes, area)
+    upload_image_json_data(indexes, area, user)
 
     return "Update has been successful, managed to push one image!"
 
