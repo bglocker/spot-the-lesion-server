@@ -96,9 +96,9 @@ def post_image_json_data():
         if area[i] <= lesion_area:
             difficulty_bucket = difficulties[i]
             storage.child(cloud_path + annotations_path + difficulty_bucket + str(indexes[i]) + ".json").put(
-                "image.json")
+                "image.json", user['idToken'])
             storage.child(cloud_path + images_path + difficulty_bucket + str(indexes[i]) + ".png").put(
-                "image.png")
+                "image.png", user['idToken'])
             indexes[i] += 1
             break
 
@@ -135,7 +135,13 @@ def add_images():
 
     files = list(zip(f, g))
 
-    indexes, area = retrieve_image_json_data()
+    # Create an auth instance and refresh token to securely interact with the firebase storage
+    user = auth.sign_in_with_email_and_password("spot-the-lesion@gmail.com", os.environ["REACT_APP_FIREBASE_AUTH_KEY"])
+
+    # Refresh expiry token to prevent stale date
+    user = auth.refresh(user['refreshToken'])
+
+    indexes, area = retrieve_image_json_data(user)
 
     def upload_data(files):
         (new_annot_file, new_image_file) = files
