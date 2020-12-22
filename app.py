@@ -107,7 +107,7 @@ def post_image_json_data():
 
     upload_image_json_data(indexes, area, user)
 
-    return "Update has been successful, managed to push one image and jsom!"
+    return "Update has been successful, managed to push one image and json!"
 
 
 # A welcome message to test our server
